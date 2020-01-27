@@ -1,7 +1,7 @@
 <?php
-	
-	require "inc/lib.inc.php";
-	require "inc/config.inc.php";
+	require "secure/session.inc.php";
+	require "../inc/lib.inc.php";
+	require "../inc/config.inc.php";
 
 	$goods = selectAllItems($link);
 	if($goods === false){ echo "Error";exit;}
@@ -14,7 +14,6 @@
 	<title>Каталог книг</title>
 </head>
 <body>
-<p>Книг в <a href="basket.php">корзине</a>: <?= $count?></p>
 <table border="1" cellpadding="5" cellspacing="0" width="100%">
 <tr>
 	<th>Обложка</th>
@@ -34,12 +33,13 @@ foreach($goods as $item){
 		<td><?= $item['author']?></td>
 		<td><?= $item['pubyear']?></td>
 		<td><?= $item['price']?></td>
-		<td><a href="add2basket.php?id=<?= $item['id']?>">В корзину</a></td>
+		<td><a href="delBook2.php?id=<?= $item['id']?>">Удалить</a></td>
 	</tr>
 <?
 }
 
 ?>
 </table>
+<p><a href="/admin">Отмена</a>
 </body>
 </html>

@@ -46,7 +46,7 @@ $goods = myBasket($link);
 		<td><?= $item['author']?></td>
 		<td><?= $item['pubyear']?></td>
 		<td class="good-price"><?= $item['price']?></td>
-		<td><input class="good-quantity" type="number" id="tentacles" name="tentacles" min="1" max="100" value="<?= $item['quantity']?>" onchange="calcSum(event)"></td>
+		<td><input class="good-quantity" type="number" id="tentacles" name="tentacles" min="1" max="100" data-good-id="<?=$item['id']?>" value="<?= $item['quantity']?>" onchange="calcSum(event)"></td>
 		<td><a href="delete_from_basket.php?id=<?= $item['id']?>">удалить</a></td>
 	</tr>
 <?
@@ -66,6 +66,10 @@ $sum += $item['price'] * $item['quantity'];
 	евро.
 </p>
 
+<div align="center">
+	<input type="button" value="Оформить заказ!"
+                      onClick="location.href='orderform.php'" />
+</div>
 
 
 
@@ -79,7 +83,28 @@ $sum += $item['price'] * $item['quantity'];
 			sum += price.innerText * quantity.value;
 		}
 		document.getElementsByClassName('order-sum')[0].innerText = sum;
+
+		let valueStart = document.cookie.indexOf("basket=");
+		if (valueStart == -1) return;
+		valueStart = valueStart + 7;
+		let valueEnd = document.cookie.indexOf("; ", valueStart);
+		if (valueEnd == -1){
+			var basket = document.cookie.substring(valueStart);
+		}
+		else{
+			var basket = document.cookie.substring(valueStart, valueEnd);
+		}
+		
+		basket = atob(basket);
+		basket = JSON.parse(basket);
+		let goodid = event.target.dataset.goodId;
+		basket[goodid] = +event.target.value;
+		basket = JSON.stringify(basket);
+		basket = btoa(basket);
+		document.cookie = "basket=" + basket;
+		
 	}
+
 </script>
 </body>
 </html>
